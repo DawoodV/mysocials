@@ -6,37 +6,31 @@
     <title>digi_xd/dawood / 23</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-
         :root {
             --neon-blue: #00ccff;
         }
-
         * {
             box-sizing: border-box;
         }
-
         body {
             margin: 0;
             padding: 0;
             background: #000 url('fish.gif') center/cover no-repeat fixed;
             color: var(--neon-blue);
             font-family: 'VT323', monospace;
-            /* allow scrolling on mobile so winamp isn't cut off */
             overflow-x: hidden;
             overflow-y: auto;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            min-height: 100dvh; /* dynamic viewport height for mobile browsers */
+            min-height: 100dvh;
             position: relative;
-            /* safe area insets for notched phones */
             padding-bottom: env(safe-area-inset-bottom);
         }
-
         body::before {
             content: '';
-            position: fixed; /* fixed so it covers the full viewport always */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -44,7 +38,6 @@
             background: rgba(0, 0, 0, 0.65);
             z-index: 1;
         }
-
         /* ── swimming fish layer ── */
         #fish-layer {
             position: fixed;
@@ -53,7 +46,6 @@
             pointer-events: none;
             overflow: hidden;
         }
-
         .swimming-fish {
             position: absolute;
             display: flex;
@@ -61,20 +53,16 @@
             align-items: center;
             gap: 3px;
         }
-
         .swimming-fish img {
             width: 140px;
             height: auto;
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
         }
-
-        /* smaller fish on mobile so they don't dominate the screen */
         @media (max-width: 480px) {
             .swimming-fish img {
                 width: 80px;
             }
         }
-
         .fish-label {
             color: #fff;
             font-family: 'VT323', monospace;
@@ -89,11 +77,9 @@
             white-space: nowrap;
             pointer-events: none;
         }
-
         @media (max-width: 480px) {
             .fish-label { font-size: 12px; }
         }
-
         /* ── tap-to-enter overlay ── */
         #start-overlay {
             position: fixed;
@@ -105,8 +91,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            /* tap highlight off */
-            -webkit-tap-highlight-color: transparent;
             font-family: 'VT323', monospace;
             color: var(--neon-blue);
             text-shadow: 0 0 10px var(--neon-blue);
@@ -114,23 +98,19 @@
             padding: 20px;
             text-align: center;
         }
-
         #start-overlay .enter-text {
             font-size: clamp(24px, 8vw, 36px);
             letter-spacing: 4px;
             animation: blink 1s infinite;
         }
-
         #start-overlay .sub-text {
             font-size: clamp(14px, 4vw, 18px);
             opacity: 0.6;
             letter-spacing: 2px;
         }
-
         #start-overlay.hidden {
             display: none;
         }
-
         /* ── mute button ── */
         #mute-btn {
             position: fixed;
@@ -142,23 +122,19 @@
             color: var(--neon-blue);
             font-family: 'VT323', monospace;
             font-size: 18px;
-            padding: 6px 12px; /* slightly larger tap target */
+            padding: 6px 12px;
             cursor: pointer;
             letter-spacing: 1px;
             text-shadow: 0 0 6px var(--neon-blue);
             display: none;
-            /* prevent double-tap zoom on mobile */
             touch-action: manipulation;
         }
-
         #mute-btn:active {
             border-style: inset;
         }
-
         /* ── winamp wrapper ── */
         .winamp {
             width: 340px;
-            /* on small screens fill to 92vw, never exceed 340px */
             max-width: 92vw;
             margin: 15px auto;
             background: #1c1c1c;
@@ -170,7 +146,6 @@
             overflow: hidden;
             z-index: 10;
         }
-
         .winamp::before {
             content: '';
             position: absolute;
@@ -187,12 +162,10 @@
             z-index: 999;
             animation: flicker 0.12s infinite alternate;
         }
-
         @keyframes flicker {
             0% { opacity: 0.93; }
             100% { opacity: 1; }
         }
-
         .title-bar {
             background: linear-gradient(to right, #222, #444);
             height: 24px;
@@ -204,17 +177,14 @@
             letter-spacing: 2px;
             text-shadow: 0 0 6px var(--neon-blue);
         }
-
         .title-bar span {
             flex: 1;
             text-align: center;
         }
-
         .title-buttons {
             display: flex;
             gap: 3px;
         }
-
         .title-btn {
             width: 18px;
             height: 16px;
@@ -228,19 +198,15 @@
             justify-content: center;
             font-size: 12px;
             cursor: pointer;
-            /* bigger effective tap area via padding trick */
             touch-action: manipulation;
         }
-
         .title-btn:active {
             border-style: inset;
         }
-
         .main-window {
             padding: 10px 12px 8px;
             background: #111;
         }
-
         .now-playing-panel {
             display: flex;
             gap: 10px;
@@ -249,7 +215,6 @@
             border: 3px inset #333;
             padding: 6px;
         }
-
         .visualizer {
             flex: 1;
             display: flex;
@@ -260,18 +225,15 @@
             background: #001122;
             border: 3px solid #222;
             box-shadow: inset 0 0 10px var(--neon-blue);
-            /* on very small screens allow bars to shrink */
             overflow: hidden;
         }
-
         .bar {
-            flex: 1; /* use flex instead of fixed width so bars fill space */
+            flex: 1;
             min-width: 4px;
             background: linear-gradient(#00ccff, #0099cc);
             box-shadow: 0 0 8px var(--neon-blue);
             transition: height 0.04s linear;
         }
-
         .time-display {
             min-width: 80px;
             background: #001122;
@@ -284,7 +246,6 @@
             text-shadow: 0 0 12px var(--neon-blue);
             white-space: nowrap;
         }
-
         .track-info {
             background: #001122;
             border: 3px inset #222;
@@ -292,29 +253,24 @@
             margin-bottom: 10px;
             text-align: center;
         }
-
         .artist {
             font-size: clamp(18px, 6vw, 24px);
             letter-spacing: 2px;
         }
-
         .track-title {
             font-size: clamp(15px, 5vw, 19px);
             color: #00eeff;
         }
-
         .controls {
             display: flex;
             justify-content: center;
             gap: 6px;
             margin-bottom: 10px;
         }
-
         .ctrl-btn {
-            /* grow to fill row on small screens */
             flex: 1;
             max-width: 52px;
-            height: 44px; /* taller for finger tapping */
+            height: 44px;
             background: linear-gradient(#2a2a2a, #111);
             border: 3px outset #555;
             color: var(--neon-blue);
@@ -328,12 +284,10 @@
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
-
         .ctrl-btn:active {
             border-style: inset;
             transform: translateY(2px);
         }
-
         .progress-container {
             height: 12px;
             background: #001122;
@@ -342,98 +296,80 @@
             margin-bottom: 8px;
             overflow: hidden;
         }
-
         .progress-bar {
             height: 100%;
             width: 0%;
             background: linear-gradient(to right, #00ccff, #0099cc);
             box-shadow: 0 0 10px var(--neon-blue);
         }
-
         .footer-info {
             display: flex;
             font-size: 13px;
             justify-content: space-between;
             color: #00aaff;
         }
-
         .playlist {
             border-top: 5px solid #222;
             background: #111;
         }
-
         .playlist-header {
             background: linear-gradient(to right, #222, #444);
             padding: 5px 10px;
             font-size: 16px;
             letter-spacing: 1px;
         }
-
         .playlist-header::before {
             content: '▶';
             margin-right: 6px;
             animation: blink 0.8s infinite;
         }
-
         .playlist-list {
             max-height: 190px;
             overflow-y: auto;
-            /* momentum scrolling on iOS */
             -webkit-overflow-scrolling: touch;
             padding: 4px;
         }
-
         .playlist-row {
             display: flex;
             align-items: center;
-            padding: 8px 10px; /* taller rows for fingers */
+            padding: 8px 10px;
             font-size: clamp(14px, 4.5vw, 16px);
             cursor: pointer;
             border-bottom: 1px dotted #222;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
-
         .playlist-row:hover,
         .playlist-row:active {
             background: var(--neon-blue);
             color: #111;
         }
-
         .playlist-row .num {
             width: 24px;
             opacity: 0.8;
         }
-
         .playlist-row a {
             color: inherit;
             text-decoration: none;
         }
-
         @keyframes blink {
             50% { opacity: 0.4; }
         }
     </style>
 </head>
 <body>
-
     <!-- Swimming fish layer -->
     <div id="fish-layer"></div>
-
     <!-- Audio element -->
     <audio id="bg-audio" src="underwater.mp3" loop preload="auto"></audio>
-
     <!-- Tap-to-enter overlay -->
     <div id="start-overlay">
         <div class="enter-text">[ TAP TO ENTER ]</div>
         <div class="sub-text">tap anywhere to start</div>
     </div>
-
     <!-- Mute toggle -->
     <button id="mute-btn" title="toggle mute">[ MUTE ]</button>
-
     <div class="winamp" id="winamp">
-        
         <div class="title-bar">
             <span>digi_xd</span>
             <div class="title-buttons">
@@ -442,9 +378,7 @@
                 <div class="title-btn" id="close-btn" title="close">×</div>
             </div>
         </div>
-
         <div class="main-window">
-
             <div class="now-playing-panel">
                 <div class="visualizer" id="visualizer">
                     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
@@ -452,15 +386,12 @@
                     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
                     <div class="bar"></div><div class="bar"></div><div class="bar"></div>
                 </div>
-
                 <div class="time-display" id="time-display">00:00</div>
             </div>
-
             <div class="track-info">
                 <div class="artist"></div>
                 <div class="track-title" id="track-title">connecting...</div>
             </div>
-
             <div class="controls">
                 <div class="ctrl-btn" id="prev-btn">⏮︎</div>
                 <div class="ctrl-btn" id="play-btn">▶︎</div>
@@ -468,18 +399,15 @@
                 <div class="ctrl-btn" id="stop-btn">⏹︎</div>
                 <div class="ctrl-btn" id="next-btn">⏭︎</div>
             </div>
-
             <div class="progress-container">
                 <div class="progress-bar" id="progress-bar"></div>
             </div>
-
             <div class="footer-info">
                 <div>◼ <span id="status">READY</span></div>
                 <div></div>
                 <div>BUFF: <span class="blink">100%</span></div>
             </div>
         </div>
-
         <div class="playlist">
             <div class="playlist-header">my socials</div>
             <div class="playlist-list">
@@ -509,14 +437,15 @@
 
     <script>
         // ══════════════════════════════════════════════
-        //  FISH SWIMMING SYSTEM
+        // FISH SWIMMING SYSTEM
         // ══════════════════════════════════════════════
         const FISH_FILES = [
             'fish_MrBanana.png',
             'fish_Rocky.png',
             '/fish_ERM ACKSHULLY.png',
             'fish_bobby.png',
-            // Add more fish here, e.g. 'fish_steve.png'
+            'fish_heart.png',        // ← renamed for safety
+            // Add more fish here
         ];
 
         const fishLayer = document.getElementById('fish-layer');
@@ -525,7 +454,14 @@
         function fishName(filename) {
             const base = filename.replace('.png', '');
             const parts = base.split('_');
-            return parts.length > 1 ? parts.slice(1).join('_') : base;
+            let name = parts.length > 1 ? parts.slice(1).join('_') : base;
+
+            // Special case to show <3 instead of "heart"
+            if (filename.includes('heart1')) {
+                name = '<3';
+            }
+
+            return name;
         }
 
         function shuffle(arr) {
@@ -545,36 +481,28 @@
             const name = fishName(filename);
             const wrapper = document.createElement('div');
             wrapper.className = 'swimming-fish';
-
             const img = document.createElement('img');
             img.src = filename;
             img.alt = name;
             img.draggable = false;
-
             const label = document.createElement('div');
             label.className = 'fish-label';
             label.textContent = name;
-
             wrapper.appendChild(img);
             wrapper.appendChild(label);
             fishLayer.appendChild(wrapper);
 
             const W = window.innerWidth;
             const H = window.innerHeight;
-
-            // Smaller fish on mobile so they don't crowd out the UI
             const baseSize = isMobile() ? 55 : 96;
             const sizeRange = isMobile() ? 35 : 97;
             const size = baseSize + Math.random() * sizeRange;
-
             const duration = 12000 + Math.random() * 14000;
-
-            const wobbleAmp   = 18 + Math.random() * 28;
+            const wobbleAmp = 18 + Math.random() * 28;
             const wobbleSpeed = 0.6 + Math.random() * 1.2;
-            const tiltAmp     = 6  + Math.random() * 10;
-            const rollSpeed   = 0.3 + Math.random() * 0.5;
-            const rollAmp     = 4  + Math.random() * 8;
-
+            const tiltAmp = 6 + Math.random() * 10;
+            const rollSpeed = 0.3 + Math.random() * 0.5;
+            const rollAmp = 4 + Math.random() * 8;
             const edge = Math.floor(Math.random() * 2);
             let startX, startY, endX, endY;
             let facingLeft = false;
@@ -590,14 +518,11 @@
             }
 
             img.style.width = size + 'px';
-
             const dx = endX - startX;
             const dy = endY - startY;
             const travelAngleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
-
             const baseAngle = facingLeft ? travelAngleDeg + 180 : travelAngleDeg;
-            const scaleX    = facingLeft ? -1 : 1;
-
+            const scaleX = facingLeft ? -1 : 1;
             const startTime = performance.now();
             let raf;
 
@@ -611,29 +536,21 @@
                     setTimeout(() => spawnFish(filename), 1000 + Math.random() * 4000);
                     return;
                 }
-
                 const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
                 const x = startX + (endX - startX) * ease;
                 const y = startY + (endY - startY) * ease;
-
                 const wobble = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * wobbleAmp;
-                const tilt   = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * tiltAmp;
-                const roll   = Math.sin(elapsed / 1000 * rollSpeed   * Math.PI * 2) * rollAmp;
-
+                const tilt = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * tiltAmp;
+                const roll = Math.sin(elapsed / 1000 * rollSpeed * Math.PI * 2) * rollAmp;
                 const perpAngle = Math.atan2(dy, dx) - Math.PI / 2;
                 const wx = Math.cos(perpAngle) * wobble;
                 const wy = Math.sin(perpAngle) * wobble;
-
                 wrapper.style.left = (x + wx) + 'px';
-                wrapper.style.top  = (y + wy) + 'px';
-
+                wrapper.style.top = (y + wy) + 'px';
                 const finalAngle = baseAngle + tilt + roll;
                 img.style.transform = `rotate(${finalAngle}deg) scaleX(${scaleX})`;
-
                 raf = requestAnimationFrame(tick);
             }
-
             raf = requestAnimationFrame(tick);
             const entry = { wrapper, raf, filename };
             activeFish.push(entry);
@@ -644,14 +561,12 @@
             setTimeout(() => spawnFish(file), i * 100 + Math.random() * 100);
         });
 
-
         // ══════════════════════════════════════════════
-        //  AUDIO SETUP
+        // AUDIO SETUP
         // ══════════════════════════════════════════════
-        const audio   = document.getElementById('bg-audio');
+        const audio = document.getElementById('bg-audio');
         const overlay = document.getElementById('start-overlay');
         const muteBtn = document.getElementById('mute-btn');
-
         audio.volume = 0.5;
 
         function startAudio() {
@@ -660,7 +575,7 @@
             audio.play().catch(err => console.warn('Audio play failed:', err));
         }
 
-        overlay.addEventListener('click',    startAudio, { once: true });
+        overlay.addEventListener('click', startAudio, { once: true });
         overlay.addEventListener('touchend', startAudio, { once: true, passive: true });
 
         muteBtn.addEventListener('click', () => {
@@ -674,20 +589,18 @@
             }
         });
 
-
         // ══════════════════════════════════════════════
-        //  WINAMP UI LOGIC
+        // WINAMP UI LOGIC
         // ══════════════════════════════════════════════
         let seconds = 0;
         let progress = 0;
         let isPlaying = true;
         let timeInterval, progressInterval, eqInterval;
-
         const timeDisplay = document.getElementById('time-display');
         const progressBar = document.getElementById('progress-bar');
-        const statusEl    = document.getElementById('status');
-        const bars        = document.querySelectorAll('.bar');
-        const closeBtn    = document.getElementById('close-btn');
+        const statusEl = document.getElementById('status');
+        const bars = document.querySelectorAll('.bar');
+        const closeBtn = document.getElementById('close-btn');
 
         function animateEqualizer() {
             bars.forEach(bar => {
@@ -711,13 +624,12 @@
         }
 
         function startAnimations() {
-            if (timeInterval)    clearInterval(timeInterval);
+            if (timeInterval) clearInterval(timeInterval);
             if (progressInterval) clearInterval(progressInterval);
-            if (eqInterval)      clearInterval(eqInterval);
-
-            timeInterval     = setInterval(updateTime, 1000);
+            if (eqInterval) clearInterval(eqInterval);
+            timeInterval = setInterval(updateTime, 1000);
             progressInterval = setInterval(updateProgress, 90);
-            eqInterval       = setInterval(animateEqualizer, 38);
+            eqInterval = setInterval(animateEqualizer, 38);
         }
 
         closeBtn.addEventListener('click', () => {
