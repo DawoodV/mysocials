@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>digi_xd/dawood / 23</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
@@ -21,17 +21,22 @@
             background: #000 url('fish.gif') center/cover no-repeat fixed;
             color: var(--neon-blue);
             font-family: 'VT323', monospace;
-            overflow: hidden;
+            /* allow scrolling on mobile so winamp isn't cut off */
+            overflow-x: hidden;
+            overflow-y: auto;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            min-height: 100dvh; /* dynamic viewport height for mobile browsers */
             position: relative;
+            /* safe area insets for notched phones */
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         body::before {
             content: '';
-            position: absolute;
+            position: fixed; /* fixed so it covers the full viewport always */
             top: 0;
             left: 0;
             width: 100%;
@@ -63,6 +68,13 @@
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
         }
 
+        /* smaller fish on mobile so they don't dominate the screen */
+        @media (max-width: 480px) {
+            .swimming-fish img {
+                width: 80px;
+            }
+        }
+
         .fish-label {
             color: #fff;
             font-family: 'VT323', monospace;
@@ -78,7 +90,11 @@
             pointer-events: none;
         }
 
-        /* ── tap-to-enter overlay (mobile autoplay gate) ── */
+        @media (max-width: 480px) {
+            .fish-label { font-size: 12px; }
+        }
+
+        /* ── tap-to-enter overlay ── */
         #start-overlay {
             position: fixed;
             inset: 0;
@@ -89,20 +105,24 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            /* tap highlight off */
+            -webkit-tap-highlight-color: transparent;
             font-family: 'VT323', monospace;
             color: var(--neon-blue);
             text-shadow: 0 0 10px var(--neon-blue);
             gap: 12px;
+            padding: 20px;
+            text-align: center;
         }
 
         #start-overlay .enter-text {
-            font-size: 36px;
+            font-size: clamp(24px, 8vw, 36px);
             letter-spacing: 4px;
             animation: blink 1s infinite;
         }
 
         #start-overlay .sub-text {
-            font-size: 18px;
+            font-size: clamp(14px, 4vw, 18px);
             opacity: 0.6;
             letter-spacing: 2px;
         }
@@ -114,7 +134,7 @@
         /* ── mute button ── */
         #mute-btn {
             position: fixed;
-            bottom: 14px;
+            bottom: calc(14px + env(safe-area-inset-bottom));
             right: 14px;
             z-index: 100;
             background: #1c1c1c;
@@ -122,21 +142,24 @@
             color: var(--neon-blue);
             font-family: 'VT323', monospace;
             font-size: 18px;
-            padding: 4px 10px;
+            padding: 6px 12px; /* slightly larger tap target */
             cursor: pointer;
             letter-spacing: 1px;
             text-shadow: 0 0 6px var(--neon-blue);
             display: none;
+            /* prevent double-tap zoom on mobile */
+            touch-action: manipulation;
         }
 
         #mute-btn:active {
             border-style: inset;
         }
 
-
+        /* ── winamp wrapper ── */
         .winamp {
             width: 340px;
-            max-width: 90vw;
+            /* on small screens fill to 92vw, never exceed 340px */
+            max-width: 92vw;
             margin: 15px auto;
             background: #1c1c1c;
             border: 6px solid #444;
@@ -205,6 +228,8 @@
             justify-content: center;
             font-size: 12px;
             cursor: pointer;
+            /* bigger effective tap area via padding trick */
+            touch-action: manipulation;
         }
 
         .title-btn:active {
@@ -235,25 +260,29 @@
             background: #001122;
             border: 3px solid #222;
             box-shadow: inset 0 0 10px var(--neon-blue);
+            /* on very small screens allow bars to shrink */
+            overflow: hidden;
         }
 
         .bar {
-            width: 11px;
+            flex: 1; /* use flex instead of fixed width so bars fill space */
+            min-width: 4px;
             background: linear-gradient(#00ccff, #0099cc);
             box-shadow: 0 0 8px var(--neon-blue);
             transition: height 0.04s linear;
         }
 
         .time-display {
-            min-width: 92px;
+            min-width: 80px;
             background: #001122;
             border: 3px inset #222;
             padding: 4px 6px;
-            font-size: 32px;
+            font-size: clamp(22px, 7vw, 32px);
             line-height: 1;
             text-align: center;
             letter-spacing: 3px;
             text-shadow: 0 0 12px var(--neon-blue);
+            white-space: nowrap;
         }
 
         .track-info {
@@ -265,12 +294,12 @@
         }
 
         .artist {
-            font-size: 24px;
+            font-size: clamp(18px, 6vw, 24px);
             letter-spacing: 2px;
         }
 
         .track-title {
-            font-size: 19px;
+            font-size: clamp(15px, 5vw, 19px);
             color: #00eeff;
         }
 
@@ -282,18 +311,22 @@
         }
 
         .ctrl-btn {
-            width: 42px;
-            height: 36px;
+            /* grow to fill row on small screens */
+            flex: 1;
+            max-width: 52px;
+            height: 44px; /* taller for finger tapping */
             background: linear-gradient(#2a2a2a, #111);
             border: 3px outset #555;
             color: var(--neon-blue);
-            font-size: 24px;
+            font-size: clamp(18px, 6vw, 24px);
             line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             font-family: system-ui, -apple-system, sans-serif;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .ctrl-btn:active {
@@ -345,19 +378,24 @@
         .playlist-list {
             max-height: 190px;
             overflow-y: auto;
+            /* momentum scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
             padding: 4px;
         }
 
         .playlist-row {
             display: flex;
             align-items: center;
-            padding: 5px 10px;
-            font-size: 16px;
+            padding: 8px 10px; /* taller rows for fingers */
+            font-size: clamp(14px, 4.5vw, 16px);
             cursor: pointer;
             border-bottom: 1px dotted #222;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .playlist-row:hover {
+        .playlist-row:hover,
+        .playlist-row:active {
             background: var(--neon-blue);
             color: #111;
         }
@@ -382,13 +420,12 @@
     <!-- Swimming fish layer -->
     <div id="fish-layer"></div>
 
-
     <!-- Audio element -->
     <audio id="bg-audio" src="underwater.mp3" loop preload="auto"></audio>
 
     <!-- Tap-to-enter overlay -->
     <div id="start-overlay">
-        <div class="enter-text">[ CLICK TO ENTER ]</div>
+        <div class="enter-text">[ TAP TO ENTER ]</div>
         <div class="sub-text">tap anywhere to start</div>
     </div>
 
@@ -473,28 +510,23 @@
     <script>
         // ══════════════════════════════════════════════
         //  FISH SWIMMING SYSTEM
-        //  To add a new fish: drop fish_NAME.png into
-        //  the same folder. That's it. Auto-detected.
         // ══════════════════════════════════════════════
         const FISH_FILES = [
             'fish_MrBanana.png',
             'fish_Rocky.png',
             'fish_bobby.png',
-	
             // Add more fish here, e.g. 'fish_steve.png'
         ];
 
         const fishLayer = document.getElementById('fish-layer');
         const activeFish = [];
 
-        // Extract name after the underscore, strip .png
         function fishName(filename) {
             const base = filename.replace('.png', '');
             const parts = base.split('_');
             return parts.length > 1 ? parts.slice(1).join('_') : base;
         }
 
-        // Fisher-Yates shuffle for random order each page load
         function shuffle(arr) {
             const a = [...arr];
             for (let i = a.length - 1; i > 0; i--) {
@@ -502,6 +534,10 @@
                 [a[i], a[j]] = [a[j], a[i]];
             }
             return a;
+        }
+
+        function isMobile() {
+            return window.innerWidth <= 480;
         }
 
         function spawnFish(filename) {
@@ -524,18 +560,21 @@
 
             const W = window.innerWidth;
             const H = window.innerHeight;
-            const size = 96 + Math.random() * 97; // 96–193px (1.75× original)
-            const duration = 12000 + Math.random() * 14000; // 12–26 sec
 
-            // Wobble / drift parameters
-            const wobbleAmp   = 18 + Math.random() * 28;   // px perpendicular drift
-            const wobbleSpeed = 0.6 + Math.random() * 1.2; // cycles per second
-            const tiltAmp     = 6  + Math.random() * 10;   // degrees of tilt with wobble
-            const rollSpeed   = 0.3 + Math.random() * 0.5; // slow lazy roll cycles/sec
-            const rollAmp     = 4  + Math.random() * 8;    // degrees of lazy roll
+            // Smaller fish on mobile so they don't crowd out the UI
+            const baseSize = isMobile() ? 55 : 96;
+            const sizeRange = isMobile() ? 35 : 97;
+            const size = baseSize + Math.random() * sizeRange;
 
-            // Only swim left or right
-            const edge = Math.floor(Math.random() * 2); // 0=left→right, 1=right→left
+            const duration = 12000 + Math.random() * 14000;
+
+            const wobbleAmp   = 18 + Math.random() * 28;
+            const wobbleSpeed = 0.6 + Math.random() * 1.2;
+            const tiltAmp     = 6  + Math.random() * 10;
+            const rollSpeed   = 0.3 + Math.random() * 0.5;
+            const rollAmp     = 4  + Math.random() * 8;
+
+            const edge = Math.floor(Math.random() * 2);
             let startX, startY, endX, endY;
             let facingLeft = false;
 
@@ -551,13 +590,10 @@
 
             img.style.width = size + 'px';
 
-            // Compute the base travel angle so fish points toward destination
             const dx = endX - startX;
             const dy = endY - startY;
             const travelAngleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
 
-            // If fish image naturally faces right (scaleX=1), rotate to match travel direction.
-            // If it needs to face left (mirror), flip and adjust angle.
             const baseAngle = facingLeft ? travelAngleDeg + 180 : travelAngleDeg;
             const scaleX    = facingLeft ? -1 : 1;
 
@@ -568,30 +604,22 @@
                 const elapsed = now - startTime;
                 const t = elapsed / duration;
                 if (t >= 1) {
-                    fishLayer.removeChild(wrapper);
+                    if (fishLayer.contains(wrapper)) fishLayer.removeChild(wrapper);
                     const idx = activeFish.indexOf(entry);
                     if (idx > -1) activeFish.splice(idx, 1);
                     setTimeout(() => spawnFish(filename), 1000 + Math.random() * 4000);
                     return;
                 }
 
-                // Smooth ease in-out
                 const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
-                // Main path position
                 const x = startX + (endX - startX) * ease;
                 const y = startY + (endY - startY) * ease;
 
-                // Perpendicular wobble (sinusoidal drift across travel direction)
                 const wobble = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * wobbleAmp;
+                const tilt   = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * tiltAmp;
+                const roll   = Math.sin(elapsed / 1000 * rollSpeed   * Math.PI * 2) * rollAmp;
 
-                // Tilt fish slightly with wobble (pitching up/down as they weave)
-                const tilt = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * tiltAmp;
-
-                // Lazy slow roll (independent rhythm)
-                const roll = Math.sin(elapsed / 1000 * rollSpeed * Math.PI * 2) * rollAmp;
-
-                // Apply perpendicular wobble offset (rotate wobble direction 90° from travel)
                 const perpAngle = Math.atan2(dy, dx) - Math.PI / 2;
                 const wx = Math.cos(perpAngle) * wobble;
                 const wy = Math.sin(perpAngle) * wobble;
@@ -599,7 +627,6 @@
                 wrapper.style.left = (x + wx) + 'px';
                 wrapper.style.top  = (y + wy) + 'px';
 
-                // Combine: base facing angle + tilt from wobble + lazy roll
                 const finalAngle = baseAngle + tilt + roll;
                 img.style.transform = `rotate(${finalAngle}deg) scaleX(${scaleX})`;
 
@@ -611,26 +638,20 @@
             activeFish.push(entry);
         }
 
-        // Shuffle fish order, then stagger spawns with random delays
         const shuffledFish = shuffle(FISH_FILES);
         shuffledFish.forEach((file, i) => {
-            setTimeout(() => spawnFish(file), i * 2000 + Math.random() * 1500);
+            setTimeout(() => spawnFish(file), i * 100 + Math.random() * 100);
         });
-
-
 
 
         // ══════════════════════════════════════════════
         //  AUDIO SETUP
         // ══════════════════════════════════════════════
-        const audio = document.getElementById('bg-audio');
+        const audio   = document.getElementById('bg-audio');
         const overlay = document.getElementById('start-overlay');
         const muteBtn = document.getElementById('mute-btn');
 
         audio.volume = 0.5;
-
-        overlay.addEventListener('click', startAudio, { once: true });
-        overlay.addEventListener('touchend', startAudio, { once: true });
 
         function startAudio() {
             overlay.classList.add('hidden');
@@ -638,13 +659,16 @@
             audio.play().catch(err => console.warn('Audio play failed:', err));
         }
 
+        overlay.addEventListener('click',    startAudio, { once: true });
+        overlay.addEventListener('touchend', startAudio, { once: true, passive: true });
+
         muteBtn.addEventListener('click', () => {
             audio.muted = !audio.muted;
             muteBtn.textContent = audio.muted ? '[ UNMUTE ]' : '[ MUTE ]';
         });
 
         document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && !audio.paused === false && !audio.muted) {
+            if (!document.hidden && audio.paused && !audio.muted) {
                 audio.play().catch(() => {});
             }
         });
