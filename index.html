@@ -187,20 +187,19 @@
             margin-bottom: 10px;
         }
 
-        /* FIXED CONTROL BUTTONS - using safer symbols + font-size tweak */
         .ctrl-btn {
             width: 42px;
             height: 36px;
             background: linear-gradient(#2a2a2a, #111);
             border: 3px outset #555;
             color: var(--neon-blue);
-            font-size: 24px;          /* slightly larger for better visibility */
+            font-size: 24px;
             line-height: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-family: system-ui, -apple-system, sans-serif; /* helps prevent emoji substitution */
+            font-family: system-ui, -apple-system, sans-serif;
         }
 
         .ctrl-btn:active {
@@ -316,7 +315,6 @@
             </div>
 
             <div class="controls">
-                <!-- Using safer Unicode + text fallback where needed -->
                 <div class="ctrl-btn" id="prev-btn">⏮︎</div>
                 <div class="ctrl-btn" id="play-btn">▶︎</div>
                 <div class="ctrl-btn" id="pause-btn">⏸︎</div>
@@ -346,12 +344,16 @@
                     <span class="num">02.</span>
                     <span>discord → digi_xd</span>
                 </div>
-                <div class="playlist-row" data-url="https://www.youtube.com/@digi_xdd">
+                <div class="playlist-row" data-url="https://www.instagram.com/digi.xd/">
                     <span class="num">03.</span>
+                    <a href="https://www.instagram.com/digi.xd/" target="_blank">insta</a>
+                </div>
+                <div class="playlist-row" data-url="https://www.youtube.com/@digi_xdd">
+                    <span class="num">04.</span>
                     <a href="https://www.youtube.com/@digi_xdd" target="_blank">yt</a>
                 </div>
                 <div class="playlist-row" data-url="https://www.youtube.com/@digixd2">
-                    <span class="num">04.</span>
+                    <span class="num">05.</span>
                     <a href="https://www.youtube.com/@digixd2" target="_blank">yt2</a>
                 </div>
             </div>
@@ -403,13 +405,13 @@
 
         closeBtn.addEventListener('click', () => {
             const winamp = document.getElementById('winamp');
-           
+            
             setTimeout(() => {
                 winamp.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.9)';
             }, 300);
 
             setTimeout(() => {
-                alert("loser :P\n\ndigi_xd.exe has been terminated");
+                alert("loser :P");
             }, 100);
         });
 
