@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>digi_xd</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        :root {
+            --neon-blue: #00ccff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000 url('fish.gif') center/cover no-repeat fixed;
+            color: var(--neon-blue);
+            font-family: 'VT323', monospace;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 1;
+        }
+
+        .winamp {
+            width: 340px;
+            max-width: 90vw;
+            margin: 15px auto;
+            background: #1c1c1c;
+            border: 6px solid #444;
+            border-top-color: #666;
+            border-left-color: #666;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .winamp::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 204, 255, 0.07) 3px,
+                rgba(0, 204, 255, 0.07) 6px
+            );
+            pointer-events: none;
+            z-index: 999;
+            animation: flicker 0.12s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.93; }
+            100% { opacity: 1; }
+        }
+
+        .title-bar {
+            background: linear-gradient(to right, #222, #444);
+            height: 24px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            border-bottom: 3px solid #111;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 6px var(--neon-blue);
+        }
+
+        .title-bar span {
+            flex: 1;
+            text-align: center;
+        }
+
+        .title-buttons {
+            display: flex;
+            gap: 3px;
+        }
+
+        .title-btn {
+            width: 18px;
+            height: 16px;
+            background: #222;
+            border: 2px solid #666;
+            border-top-color: #999;
+            border-left-color: #999;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .title-btn:active {
+            border-style: inset;
+        }
+
+        .main-window {
+            padding: 10px 12px 8px;
+            background: #111;
+        }
+
+        .now-playing-panel {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            background: #000;
+            border: 3px inset #333;
+            padding: 6px;
+        }
+
+        .visualizer {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            height: 64px;
+            gap: 2px;
+            padding: 4px;
+            background: #001122;
+            border: 3px solid #222;
+            box-shadow: inset 0 0 10px var(--neon-blue);
+        }
+
+        .bar {
+            width: 11px;
+            background: linear-gradient(#00ccff, #0099cc);
+            box-shadow: 0 0 8px var(--neon-blue);
+            transition: height 0.04s linear;
+        }
+
+        .time-display {
+            min-width: 92px;
+            background: #001122;
+            border: 3px inset #222;
+            padding: 4px 6px;
+            font-size: 32px;
+            line-height: 1;
+            text-align: center;
+            letter-spacing: 3px;
+            text-shadow: 0 0 12px var(--neon-blue);
+        }
+
+        .track-info {
+            background: #001122;
+            border: 3px inset #222;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .artist {
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+
+        .track-title {
+            font-size: 19px;
+            color: #00eeff;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        /* FIXED CONTROL BUTTONS - using safer symbols + font-size tweak */
+        .ctrl-btn {
+            width: 42px;
+            height: 36px;
+            background: linear-gradient(#2a2a2a, #111);
+            border: 3px outset #555;
+            color: var(--neon-blue);
+            font-size: 24px;          /* slightly larger for better visibility */
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-family: system-ui, -apple-system, sans-serif; /* helps prevent emoji substitution */
+        }
+
+        .ctrl-btn:active {
+            border-style: inset;
+            transform: translateY(2px);
+        }
+
+        .progress-container {
+            height: 12px;
+            background: #001122;
+            border: 3px inset #222;
+            position: relative;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #00ccff, #0099cc);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .footer-info {
+            display: flex;
+            font-size: 13px;
+            justify-content: space-between;
+            color: #00aaff;
+        }
+
+        .playlist {
+            border-top: 5px solid #222;
+            background: #111;
+        }
+
+        .playlist-header {
+            background: linear-gradient(to right, #222, #444);
+            padding: 5px 10px;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .playlist-header::before {
+            content: '▶';
+            margin-right: 6px;
+            animation: blink 0.8s infinite;
+        }
+
+        .playlist-list {
+            max-height: 190px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .playlist-row {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-bottom: 1px dotted #222;
+        }
+
+        .playlist-row:hover {
+            background: var(--neon-blue);
+            color: #111;
+        }
+
+        .playlist-row .num {
+            width: 24px;
+            opacity: 0.8;
+        }
+
+        .playlist-row a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="winamp" id="winamp">
+        
+        <div class="title-bar">
+            <span>digi_xd</span>
+            <div class="title-buttons">
+                <div class="title-btn">_</div>
+                <div class="title-btn">□</div>
+                <div class="title-btn" id="close-btn" title="close">×</div>
+            </div>
+        </div>
+
+        <div class="main-window">
+
+            <div class="now-playing-panel">
+                <div class="visualizer" id="visualizer">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+
+                <div class="time-display" id="time-display">00:00</div>
+            </div>
+
+            <div class="track-info">
+                <div class="artist"></div>
+                <div class="track-title" id="track-title">connecting...</div>
+            </div>
+
+            <div class="controls">
+                <!-- Using safer Unicode + text fallback where needed -->
+                <div class="ctrl-btn" id="prev-btn">⏮︎</div>
+                <div class="ctrl-btn" id="play-btn">▶︎</div>
+                <div class="ctrl-btn" id="pause-btn">⏸︎</div>
+                <div class="ctrl-btn" id="stop-btn">⏹︎</div>
+                <div class="ctrl-btn" id="next-btn">⏭︎</div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <div class="footer-info">
+                <div>◼ <span id="status">READY</span></div>
+                <div></div>
+                <div>BUFF: <span class="blink">100%</span></div>
+            </div>
+        </div>
+
+        <div class="playlist">
+            <div class="playlist-header">my socials</div>
+            <div class="playlist-list">
+                <div class="playlist-row" data-url="https://open.spotify.com/user/c9s76d0yv1dagb3vhdzmoe4ex">
+                    <span class="num">01.</span>
+                    <a href="https://open.spotify.com/user/c9s76d0yv1dagb3vhdzmoe4ex" target="_blank">spotify</a>
+                </div>
+                <div class="playlist-row">
+                    <span class="num">02.</span>
+                    <span>discord → digi_xd</span>
+                </div>
+                <div class="playlist-row" data-url="https://www.youtube.com/@digi_xdd">
+                    <span class="num">03.</span>
+                    <a href="https://www.youtube.com/@digi_xdd" target="_blank">yt</a>
+                </div>
+                <div class="playlist-row" data-url="https://www.youtube.com/@digixd2">
+                    <span class="num">04.</span>
+                    <a href="https://www.youtube.com/@digixd2" target="_blank">yt2</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let seconds = 0;
+        let progress = 0;
+        let isPlaying = true;
+        let timeInterval, progressInterval, eqInterval;
+
+        const timeDisplay = document.getElementById('time-display');
+        const progressBar = document.getElementById('progress-bar');
+        const statusEl = document.getElementById('status');
+        const bars = document.querySelectorAll('.bar');
+        const closeBtn = document.getElementById('close-btn');
+
+        function animateEqualizer() {
+            bars.forEach(bar => {
+                const height = 20 + Math.random() * 78;
+                bar.style.height = `${height}%`;
+            });
+        }
+
+        function updateTime() {
+            if (!isPlaying) return;
+            seconds++;
+            const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const ss = String(seconds % 60).padStart(2, '0');
+            timeDisplay.textContent = `${mm}:${ss}`;
+        }
+
+        function updateProgress() {
+            if (!isPlaying) return;
+            progress = (progress + 3.5) % 101;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function startAnimations() {
+            if (timeInterval) clearInterval(timeInterval);
+            if (progressInterval) clearInterval(progressInterval);
+            if (eqInterval) clearInterval(eqInterval);
+
+            timeInterval = setInterval(updateTime, 1000);
+            progressInterval = setInterval(updateProgress, 90);
+            eqInterval = setInterval(animateEqualizer, 38);
+        }
+
+        closeBtn.addEventListener('click', () => {
+            const winamp = document.getElementById('winamp');
+            winamp.style.boxShadow = '0 10px 40px rgba(255, 0, 255, 0.6)';
+            setTimeout(() => {
+                winamp.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.9)';
+            }, 300);
+
+            setTimeout(() => {
+                alert("loser :P\n\ndigi_xd.exe has been terminated");
+            }, 100);
+        });
+
+        document.getElementById('play-btn').addEventListener('click', () => {
+            isPlaying = true;
+            statusEl.textContent = 'PLAYING';
+        });
+
+        document.getElementById('pause-btn').addEventListener('click', () => {
+            isPlaying = false;
+            statusEl.textContent = 'PAUSED';
+        });
+
+        document.getElementById('stop-btn').addEventListener('click', () => {
+            isPlaying = false;
+            seconds = 0;
+            progress = 0;
+            timeDisplay.textContent = '00:00';
+            progressBar.style.width = '0%';
+            statusEl.textContent = 'STOPPED';
+        });
+
+        document.querySelectorAll('.playlist-row').forEach(row => {
+            row.addEventListener('click', () => {
+                const link = row.querySelector('a');
+                if (link) {
+                    window.open(link.href, '_blank');
+                }
+            });
+        });
+
+        document.addEventListener('keydown', e => {
+            if (e.key === ' ') {
+                e.preventDefault();
+                isPlaying = !isPlaying;
+                statusEl.textContent = isPlaying ? 'PLAYING' : 'PAUSED';
+            }
+        });
+
+        window.onload = () => {
+            startAnimations();
+        };
+    </script>
+</body>
+</html>
