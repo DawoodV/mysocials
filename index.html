@@ -145,6 +145,7 @@
             position: relative;
             overflow: hidden;
             z-index: 10;
+            zoom: 0.65;
         }
         .winamp::before {
             content: '';
@@ -328,6 +329,11 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             padding: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .playlist-list::-webkit-scrollbar {
+            display: none;
         }
         .playlist-row {
             display: flex;
@@ -390,7 +396,7 @@
             </div>
             <div class="track-info">
                 <div class="artist"></div>
-                <div class="track-title" id="track-title">connecting...</div>
+                <div class="track-title" id="track-title">april 19, 2026 – ongoing...</div>
             </div>
             <div class="controls">
                 <div class="ctrl-btn" id="prev-btn">⏮︎</div>
@@ -431,6 +437,10 @@
                     <span class="num">05.</span>
                     <a href="https://www.youtube.com/@digixd2" target="_blank">yt2</a>
                 </div>
+                <div class="playlist-row" data-url="https://x.com/digii_priv">
+                    <span class="num">06.</span>
+                    <a href="https://x.com/digii_priv" target="_blank">twitter</a>
+                </div>
             </div>
         </div>
     </div>
@@ -442,7 +452,7 @@
         const FISH_FILES = [
             'fish_MrBanana.png',
             'fish_Rocky.png',
-            '/fish_ERM ACKSHULLY.png',
+            'fish_ERM ACKSHULLY.png',
             'fish_oh my god fish.png',
             'fish_heart1.png',
               'fish_twinjamin.png',
