@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,6 +39,7 @@
             background: rgba(0, 0, 0, 0.65);
             z-index: 1;
         }
+
         /* ── swimming fish layer ── */
         #fish-layer {
             position: fixed;
@@ -59,9 +61,7 @@
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.7));
         }
         @media (max-width: 480px) {
-            .swimming-fish img {
-                width: 80px;
-            }
+            .swimming-fish img { width: 80px; }
         }
         .fish-label {
             color: #fff;
@@ -80,6 +80,52 @@
         @media (max-width: 480px) {
             .fish-label { font-size: 12px; }
         }
+
+        /* ── fish food pellets ── */
+        .fish-food {
+            position: fixed;
+            z-index: 3;
+            pointer-events: none;
+            font-size: 14px;
+            transform: translate(-50%, -50%);
+            animation: foodSink 0.6s ease-out forwards;
+            filter: drop-shadow(0 0 4px rgba(255,180,80,0.8));
+            transition: opacity 0.3s;
+        }
+        @keyframes foodSink {
+            0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0.5; }
+            40%  { transform: translate(-50%, -40%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1);   opacity: 1; }
+        }
+        .fish-food.eaten {
+            animation: foodEaten 0.35s ease-out forwards;
+        }
+        @keyframes foodEaten {
+            0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+
+        /* ── feeding hint ── */
+        #feed-hint {
+            position: fixed;
+            bottom: calc(50px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            font-family: 'VT323', monospace;
+            font-size: 16px;
+            color: rgba(0, 204, 255, 0.55);
+            letter-spacing: 2px;
+            pointer-events: none;
+            animation: hintBlink 2s infinite;
+            white-space: nowrap;
+        }
+        @keyframes hintBlink {
+            0%, 100% { opacity: 0.55; }
+            50%       { opacity: 0.2; }
+        }
+        #feed-hint.hidden { display: none; }
+
         /* ── tap-to-enter overlay ── */
         #start-overlay {
             position: fixed;
@@ -108,9 +154,8 @@
             opacity: 0.6;
             letter-spacing: 2px;
         }
-        #start-overlay.hidden {
-            display: none;
-        }
+        #start-overlay.hidden { display: none; }
+
         /* ── mute button ── */
         #mute-btn {
             position: fixed;
@@ -129,9 +174,8 @@
             display: none;
             touch-action: manipulation;
         }
-        #mute-btn:active {
-            border-style: inset;
-        }
+        #mute-btn:active { border-style: inset; }
+
         /* ── winamp wrapper ── */
         .winamp {
             width: 340px;
@@ -141,7 +185,7 @@
             border: 6px solid #444;
             border-top-color: #666;
             border-left-color: #666;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9);
             position: relative;
             overflow: hidden;
             z-index: 10;
@@ -156,15 +200,15 @@
                 to bottom,
                 transparent 0px,
                 transparent 3px,
-                rgba(0, 204, 255, 0.07) 3px,
-                rgba(0, 204, 255, 0.07) 6px
+                rgba(0,204,255,0.07) 3px,
+                rgba(0,204,255,0.07) 6px
             );
             pointer-events: none;
             z-index: 999;
             animation: flicker 0.12s infinite alternate;
         }
         @keyframes flicker {
-            0% { opacity: 0.93; }
+            0%   { opacity: 0.93; }
             100% { opacity: 1; }
         }
         .title-bar {
@@ -178,525 +222,725 @@
             letter-spacing: 2px;
             text-shadow: 0 0 6px var(--neon-blue);
         }
-        .title-bar span {
-            flex: 1;
-            text-align: center;
-        }
-        .title-buttons {
-            display: flex;
-            gap: 3px;
-        }
+        .title-bar span { flex: 1; text-align: center; }
+        .title-buttons { display: flex; gap: 3px; }
         .title-btn {
-            width: 18px;
-            height: 16px;
+            width: 18px; height: 16px;
             background: #222;
             border: 2px solid #666;
             border-top-color: #999;
             border-left-color: #999;
             color: #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 12px;
             cursor: pointer;
             touch-action: manipulation;
         }
-        .title-btn:active {
-            border-style: inset;
-        }
-        .main-window {
-            padding: 10px 12px 8px;
-            background: #111;
-        }
+        .title-btn:active { border-style: inset; }
+        .main-window { padding: 10px 12px 8px; background: #111; }
         .now-playing-panel {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            background: #000;
-            border: 3px inset #333;
-            padding: 6px;
+            display: flex; gap: 10px; margin-bottom: 10px;
+            background: #000; border: 3px inset #333; padding: 6px;
         }
         .visualizer {
-            flex: 1;
-            display: flex;
-            align-items: flex-end;
-            height: 64px;
-            gap: 2px;
-            padding: 4px;
-            background: #001122;
-            border: 3px solid #222;
-            box-shadow: inset 0 0 10px var(--neon-blue);
-            overflow: hidden;
+            flex: 1; display: flex; align-items: flex-end; height: 64px;
+            gap: 2px; padding: 4px; background: #001122;
+            border: 3px solid #222; box-shadow: inset 0 0 10px var(--neon-blue); overflow: hidden;
         }
         .bar {
-            flex: 1;
-            min-width: 4px;
+            flex: 1; min-width: 4px;
             background: linear-gradient(#00ccff, #0099cc);
             box-shadow: 0 0 8px var(--neon-blue);
             transition: height 0.04s linear;
         }
         .time-display {
-            min-width: 80px;
-            background: #001122;
-            border: 3px inset #222;
-            padding: 4px 6px;
-            font-size: clamp(22px, 7vw, 32px);
-            line-height: 1;
-            text-align: center;
-            letter-spacing: 3px;
-            text-shadow: 0 0 12px var(--neon-blue);
-            white-space: nowrap;
+            min-width: 80px; background: #001122; border: 3px inset #222;
+            padding: 4px 6px; font-size: clamp(22px, 7vw, 32px); line-height: 1;
+            text-align: center; letter-spacing: 3px;
+            text-shadow: 0 0 12px var(--neon-blue); white-space: nowrap;
         }
         .track-info {
-            background: #001122;
-            border: 3px inset #222;
-            padding: 10px 12px;
-            margin-bottom: 10px;
-            text-align: center;
+            background: #001122; border: 3px inset #222;
+            padding: 10px 12px; margin-bottom: 10px; text-align: center;
         }
-        .artist {
-            font-size: clamp(18px, 6vw, 24px);
-            letter-spacing: 2px;
-        }
-        .track-title {
-            font-size: clamp(15px, 5vw, 19px);
-            color: #00eeff;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 10px;
-        }
+        .artist { font-size: clamp(18px, 6vw, 24px); letter-spacing: 2px; }
+        .track-title { font-size: clamp(15px, 5vw, 19px); color: #00eeff; }
+        .controls { display: flex; justify-content: center; gap: 6px; margin-bottom: 10px; }
         .ctrl-btn {
-            flex: 1;
-            max-width: 52px;
-            height: 44px;
+            flex: 1; max-width: 52px; height: 44px;
             background: linear-gradient(#2a2a2a, #111);
-            border: 3px outset #555;
-            color: var(--neon-blue);
-            font-size: clamp(18px, 6vw, 24px);
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-family: system-ui, -apple-system, sans-serif;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            border: 3px outset #555; color: var(--neon-blue);
+            font-size: clamp(18px, 6vw, 24px); line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-family: system-ui, -apple-system, sans-serif;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
-        .ctrl-btn:active {
-            border-style: inset;
-            transform: translateY(2px);
-        }
+        .ctrl-btn:active { border-style: inset; transform: translateY(2px); }
         .progress-container {
-            height: 12px;
-            background: #001122;
-            border: 3px inset #222;
-            position: relative;
-            margin-bottom: 8px;
-            overflow: hidden;
+            height: 12px; background: #001122; border: 3px inset #222;
+            position: relative; margin-bottom: 8px; overflow: hidden;
         }
         .progress-bar {
-            height: 100%;
-            width: 0%;
+            height: 100%; width: 0%;
             background: linear-gradient(to right, #00ccff, #0099cc);
             box-shadow: 0 0 10px var(--neon-blue);
         }
         .footer-info {
-            display: flex;
-            font-size: 13px;
-            justify-content: space-between;
-            color: #00aaff;
+            display: flex; font-size: 13px;
+            justify-content: space-between; color: #00aaff;
         }
-        .playlist {
-            border-top: 5px solid #222;
-            background: #111;
-        }
+        .playlist { border-top: 5px solid #222; background: #111; }
         .playlist-header {
             background: linear-gradient(to right, #222, #444);
-            padding: 5px 10px;
-            font-size: 16px;
-            letter-spacing: 1px;
+            padding: 5px 10px; font-size: 16px; letter-spacing: 1px;
         }
-        .playlist-header::before {
-            content: '▶';
-            margin-right: 6px;
-            animation: blink 0.8s infinite;
-        }
+        .playlist-header::before { content: '▶'; margin-right: 6px; animation: blink 0.8s infinite; }
         .playlist-list {
-            max-height: 190px;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            padding: 4px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            max-height: 190px; overflow-y: auto;
+            -webkit-overflow-scrolling: touch; padding: 4px;
+            scrollbar-width: none; -ms-overflow-style: none;
         }
-        .playlist-list::-webkit-scrollbar {
-            display: none;
-        }
+        .playlist-list::-webkit-scrollbar { display: none; }
         .playlist-row {
-            display: flex;
-            align-items: center;
-            padding: 8px 10px;
-            font-size: clamp(14px, 4.5vw, 16px);
-            cursor: pointer;
+            display: flex; align-items: center; padding: 8px 10px;
+            font-size: clamp(14px, 4.5vw, 16px); cursor: pointer;
             border-bottom: 1px dotted #222;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
-        .playlist-row:hover,
-        .playlist-row:active {
-            background: var(--neon-blue);
-            color: #111;
-        }
-        .playlist-row .num {
-            width: 24px;
-            opacity: 0.8;
-        }
-        .playlist-row a {
-            color: inherit;
-            text-decoration: none;
-        }
-        @keyframes blink {
-            50% { opacity: 0.4; }
-        }
+        .playlist-row:hover, .playlist-row:active { background: var(--neon-blue); color: #111; }
+        .playlist-row .num { width: 24px; opacity: 0.8; }
+        .playlist-row a { color: inherit; text-decoration: none; }
+        @keyframes blink { 50% { opacity: 0.4; } }
     </style>
 </head>
 <body>
-    <!-- Swimming fish layer -->
-    <div id="fish-layer"></div>
-    <!-- Audio element -->
-    <audio id="bg-audio" src="underwater.mp3" loop preload="auto"></audio>
-    <!-- Tap-to-enter overlay -->
-    <div id="start-overlay">
-        <div class="enter-text">[ TAP TO ENTER ]</div>
-        <div class="sub-text">tap anywhere to start</div>
-    </div>
-    <!-- Mute toggle -->
-    <button id="mute-btn" title="toggle mute">[ MUTE ]</button>
-    <div class="winamp" id="winamp">
-        <div class="title-bar">
-            <span>digi_xd / dawood / 23 x_x</span>
-            <div class="title-buttons">
-                <div class="title-btn">_</div>
-                <div class="title-btn">□</div>
-                <div class="title-btn" id="close-btn" title="close">×</div>
-            </div>
-        </div>
-        <div class="main-window">
-            <div class="now-playing-panel">
-                <div class="visualizer" id="visualizer">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                </div>
-                <div class="time-display" id="time-display">00:00</div>
-            </div>
-            <div class="track-info">
-                <div class="artist"></div>
-                <div class="track-title" id="track-title">april 19, 2026 – ongoing...</div>
-            </div>
-            <div class="controls">
-                <div class="ctrl-btn" id="prev-btn">⏮︎</div>
-                <div class="ctrl-btn" id="play-btn">▶︎</div>
-                <div class="ctrl-btn" id="pause-btn">⏸︎</div>
-                <div class="ctrl-btn" id="stop-btn">⏹︎</div>
-                <div class="ctrl-btn" id="next-btn">⏭︎</div>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <div class="footer-info">
-                <div>◼ <span id="status">READY</span></div>
-                <div></div>
-                <div>BUFF: <span class="blink">100%</span></div>
-            </div>
-        </div>
-        <div class="playlist">
-            <div class="playlist-header">my socials</div>
-            <div class="playlist-list">
-                <div class="playlist-row" data-url="https://open.spotify.com/user/c9s76d0yv1dagb3vhdzmoe4ex">
-                    <span class="num">01.</span>
-                    <a href="https://open.spotify.com/user/c9s76d0yv1dagb3vhdzmoe4ex" target="_blank">spotify</a>
-                </div>
-                <div class="playlist-row">
-                    <span class="num">02.</span>
-                    <span>discord → digi_xd</span>
-                </div>
-                <div class="playlist-row" data-url="https://www.instagram.com/digi.xd/">
-                    <span class="num">03.</span>
-                    <a href="https://www.instagram.com/digi.xd/" target="_blank">insta</a>
-                </div>
-                <div class="playlist-row" data-url="https://www.youtube.com/@digi_xdd">
-                    <span class="num">04.</span>
-                    <a href="https://www.youtube.com/@digi_xdd" target="_blank">yt</a>
-                </div>
-                <div class="playlist-row" data-url="https://www.youtube.com/@digixd2">
-                    <span class="num">05.</span>
-                    <a href="https://www.youtube.com/@digixd2" target="_blank">yt2</a>
-                </div>
-                <div class="playlist-row" data-url="https://x.com/digii_priv">
-                    <span class="num">06.</span>
-                    <a href="https://x.com/digii_priv" target="_blank">twitter</a>
-                </div>
-            </div>
+
+<div id="fish-layer"></div>
+<audio id="bg-audio" src="underwater.mp3" loop preload="auto"></audio>
+
+<div id="start-overlay">
+    <div class="enter-text">[ TAP TO ENTER ]</div>
+    <div class="sub-text">tap anywhere to start</div>
+</div>
+
+<div id="feed-hint">[ click / tap to feed the fish ]</div>
+
+<button id="mute-btn" title="toggle mute">[ MUTE ]</button>
+
+<div class="winamp" id="winamp">
+    <div class="title-bar">
+        <span>digi_xd / dawood / 23 x_x</span>
+        <div class="title-buttons">
+            <div class="title-btn">_</div>
+            <div class="title-btn">□</div>
+            <div class="title-btn" id="close-btn" title="close">×</div>
         </div>
     </div>
+    <div class="main-window">
+        <div class="now-playing-panel">
+            <div class="visualizer" id="visualizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+            <div class="time-display" id="time-display">00:00</div>
+        </div>
+        <div class="track-info">
+            <div class="artist"></div>
+            <div class="track-title" id="track-title">april 19, 2026 – ongoing...</div>
+        </div>
+        <div class="controls">
+            <div class="ctrl-btn" id="prev-btn">⏮︎</div>
+            <div class="ctrl-btn" id="play-btn">▶︎</div>
+            <div class="ctrl-btn" id="pause-btn">⏸︎</div>
+            <div class="ctrl-btn" id="stop-btn">⏹︎</div>
+            <div class="ctrl-btn" id="next-btn">⏭︎</div>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="footer-info">
+            <div>◼ <span id="status">READY</span></div>
+            <div></div>
+            <div>BUFF: <span class="blink">100%</span></div>
+        </div>
+    </div>
+    <div class="playlist">
+        <div class="playlist-header">my socials</div>
+        <div class="playlist-list">
+            <div class="playlist-row" data-url="https://open.spotify.com/user/c9s76d0yv1dagb3vhdzmoe4ex">
+                <span class="num">01.</span>
+                <a href="https://open.spotify.com/user/c9s76d0yv1dagb3vhdzmoe4ex" target="_blank">spotify</a>
+            </div>
+            <div class="playlist-row">
+                <span class="num">02.</span>
+                <span>discord → digi_xd</span>
+            </div>
+            <div class="playlist-row" data-url="https://www.instagram.com/digi.xd/">
+                <span class="num">03.</span>
+                <a href="https://www.instagram.com/digi.xd/" target="_blank">insta</a>
+            </div>
+            <div class="playlist-row" data-url="https://www.youtube.com/@digi_xdd">
+                <span class="num">04.</span>
+                <a href="https://www.youtube.com/@digi_xdd" target="_blank">yt</a>
+            </div>
+            <div class="playlist-row" data-url="https://www.youtube.com/@digixd2">
+                <span class="num">05.</span>
+                <a href="https://www.youtube.com/@digixd2" target="_blank">yt2</a>
+            </div>
+            <div class="playlist-row" data-url="https://x.com/digii_priv">
+                <span class="num">06.</span>
+                <a href="https://x.com/digii_priv" target="_blank">twitter</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <script>
-        // ══════════════════════════════════════════════
-        // FISH SWIMMING SYSTEM
-        // ══════════════════════════════════════════════
-        const FISH_FILES = [
-            'fish_MrBanana.png',
-            'fish_Rocky.png',
-            'fish_ERM ACKSHULLY.png',
-            'fish_oh my god fish.png',
-            'fish_heart1.png',
-              'fish_twinjamin.png',
-              'fish_mrow.png',
-              'fish_Josiah.png',
-        'fish_FIH.png',
-            'fish_ash.png',
-            'fish_tray.png',
-            'fish_nessie.png',
-            'fish_bobby.png',
-            
-            
-            
-            
-            
-            
-            
-            'fish_Stockness Monster.png', // ← renamed for safety
-            // Add more fish here
-        ];
+<script>
+// ══════════════════════════════════════════════════════════════════
+// FISH SYSTEM — state-machine based, no jitter
+// States: SWIMMING → HOMING → EATING → RESUMING → SWIMMING
+// ══════════════════════════════════════════════════════════════════
 
-        const fishLayer = document.getElementById('fish-layer');
-        const activeFish = [];
+const FISH_FILES = [
+    'fish_MrBanana.png',
+    'fish_Rocky.png',
+    'fish_ERM ACKSHULLY.png',
+    'fish_oh my god fish.png',
+    'fish_heart1.png',
+    'fish_twinjamin.png',
+    'fish_mrow.png',
+    'fish_Josiah.png',
+    'fish_FIH.png',
+    'fish_ash.png',
+    'fish_tray.png',
+    'fish_nessie.png',
+    'fish_bobby.png',
+    'fish_Stockness Monster.png',
+];
 
-        function fishName(filename) {
-            const base = filename.replace('.png', '');
-            const parts = base.split('_');
-            let name = parts.length > 1 ? parts.slice(1).join('_') : base;
+const FOOD_EMOJIS = ['🟠', '🔴', '🟡', '🟤'];
+const fishLayer  = document.getElementById('fish-layer');
+const activeFish = []; // array of fish-state objects
+const activeFood = []; // array of food objects
 
-            // Special case to show <3 instead of "heart"
-            if (filename.includes('heart1')) {
-                name = '<3';
-            }
+function fishName(filename) {
+    const base  = filename.replace('.png', '');
+    const parts = base.split('_');
+    let name    = parts.length > 1 ? parts.slice(1).join('_') : base;
+    if (filename.includes('heart1')) name = '<3';
+    return name;
+}
 
-            return name;
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function isMobile() { return window.innerWidth <= 480; }
+
+// ── angle helpers ──
+function angleTo(ax, ay, bx, by) {
+    return Math.atan2(by - ay, bx - ax); // radians
+}
+
+function lerpAngle(a, b, t) {
+    // shortest-path angular lerp
+    let diff = b - a;
+    while (diff >  Math.PI) diff -= 2 * Math.PI;
+    while (diff < -Math.PI) diff += 2 * Math.PI;
+    return a + diff * t;
+}
+
+function dist(ax, ay, bx, by) {
+    return Math.hypot(bx - ax, by - ay);
+}
+
+// ── spawn a food pellet ──
+function spawnFood(clientX, clientY) {
+    const pellet = document.createElement('div');
+    pellet.className = 'fish-food';
+    pellet.textContent = FOOD_EMOJIS[Math.floor(Math.random() * FOOD_EMOJIS.length)];
+    pellet.style.left = clientX + 'px';
+    pellet.style.top  = clientY + 'px';
+    document.body.appendChild(pellet);
+
+    const foodObj = {
+        el: pellet,
+        x: clientX,
+        y: clientY,
+        alive: true,
+        assignedCount: 0,
+    };
+    activeFood.push(foodObj);
+
+    // auto-remove if no fish eats it after 12s
+    setTimeout(() => {
+        if (foodObj.alive) removeFoodSilently(foodObj);
+    }, 12000);
+
+    // attract nearby fish (up to 3)
+    const sorted = activeFish
+        .filter(f => f.state === 'SWIMMING' || f.state === 'RESUMING')
+        .sort((a, b) => dist(a.x, a.y, clientX, clientY) - dist(b.x, b.y, clientX, clientY))
+        .slice(0, 3);
+
+    sorted.forEach(f => assignFishToFood(f, foodObj));
+}
+
+function removeFoodSilently(foodObj) {
+    foodObj.alive = false;
+    const idx = activeFood.indexOf(foodObj);
+    if (idx > -1) activeFood.splice(idx, 1);
+    if (foodObj.el.parentNode) foodObj.el.parentNode.removeChild(foodObj.el);
+    // un-assign any fish still targeting this
+    activeFish.forEach(f => {
+        if (f.targetFood === foodObj) {
+            f.targetFood = null;
+            beginResume(f);
+        }
+    });
+}
+
+function removeFoodEaten(foodObj) {
+    foodObj.alive = false;
+    const idx = activeFood.indexOf(foodObj);
+    if (idx > -1) activeFood.splice(idx, 1);
+    foodObj.el.classList.add('eaten');
+    setTimeout(() => {
+        if (foodObj.el.parentNode) foodObj.el.parentNode.removeChild(foodObj.el);
+    }, 400);
+}
+
+function assignFishToFood(fish, foodObj) {
+    if (!foodObj.alive) return;
+    fish.state      = 'HOMING';
+    fish.targetFood = foodObj;
+    foodObj.assignedCount++;
+}
+
+// ── create and run one fish ──
+function spawnFish(filename) {
+    const name    = fishName(filename);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'swimming-fish';
+
+    const img   = document.createElement('img');
+    img.src     = filename;
+    img.alt     = name;
+    img.draggable = false;
+
+    const label = document.createElement('div');
+    label.className  = 'fish-label';
+    label.textContent = name;
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(label);
+    fishLayer.appendChild(wrapper);
+
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const baseSize  = isMobile() ? 55 : 96;
+    const sizeRange = isMobile() ? 35 : 97;
+    const size      = baseSize + Math.random() * sizeRange;
+    img.style.width = size + 'px';
+
+    // ── swimming parameters ──
+    const wobbleAmp   = 18 + Math.random() * 28;
+    const wobbleSpeed = 0.6 + Math.random() * 1.2;
+    const tiltAmp     = 6  + Math.random() * 10;
+
+    // current rendered position (with wobble)
+    let rx = 0, ry = 0;
+
+    // ── state ──
+    const fish = {
+        state:       'SWIMMING',
+        targetFood:  null,
+
+        // current smooth position (the "spine" without wobble)
+        x: 0, y: 0,
+
+        // for SWIMMING: parametric path
+        swimStart:   null,
+        swimDur:     0,
+        swimSX: 0, swimSY: 0,
+        swimEX: 0, swimEY: 0,
+        swimFacingLeft: false,
+        swimBaseAngle: 0,
+        swimT: 0,
+
+        // smoothed facing angle used for ALL states
+        facingAngle: 0,
+
+        // for HOMING speed
+        homingSpeed: (isMobile() ? 1.5 : 2.5) + Math.random(),
+
+        // for EATING: countdown
+        eatTimer: 0,
+
+        // for RESUMING: blend out
+        resumeT: 0,
+
+        // DOM refs
+        wrapper, img,
+    };
+    activeFish.push(fish);
+
+    // initialise a swim path
+    beginSwim(fish, true);
+
+    let lastTime = null;
+
+    function frame(now) {
+        if (!lastTime) lastTime = now;
+        const dt = Math.min((now - lastTime) / 1000, 0.1); // seconds, capped
+        lastTime = now;
+
+        switch (fish.state) {
+            case 'SWIMMING':  tickSwim(fish, dt, now);   break;
+            case 'HOMING':    tickHoming(fish, dt, now); break;
+            case 'EATING':    tickEating(fish, dt, now); break;
+            case 'RESUMING':  tickResume(fish, dt, now); break;
         }
 
-        function shuffle(arr) {
-            const a = [...arr];
-            for (let i = a.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
-            return a;
-        }
+        // render
+        const wrapW = wrapper.offsetWidth  || size;
+        const wrapH = wrapper.offsetHeight || size;
+        wrapper.style.left = (fish.x - wrapW / 2) + 'px';
+        wrapper.style.top  = (fish.y - wrapH / 2) + 'px';
 
-        function isMobile() {
-            return window.innerWidth <= 480;
-        }
+        const facingDeg = fish.facingAngle * (180 / Math.PI);
+        const scaleX    = (Math.cos(fish.facingAngle) < 0) ? -1 : 1;
+        img.style.transform = `rotate(${facingDeg}deg) scaleX(${scaleX})`;
 
-        function spawnFish(filename) {
-            const name = fishName(filename);
-            const wrapper = document.createElement('div');
-            wrapper.className = 'swimming-fish';
-            const img = document.createElement('img');
-            img.src = filename;
-            img.alt = name;
-            img.draggable = false;
-            const label = document.createElement('div');
-            label.className = 'fish-label';
-            label.textContent = name;
-            wrapper.appendChild(img);
-            wrapper.appendChild(label);
-            fishLayer.appendChild(wrapper);
+        fish._raf = requestAnimationFrame(frame);
+    }
 
-            const W = window.innerWidth;
-            const H = window.innerHeight;
-            const baseSize = isMobile() ? 55 : 96;
-            const sizeRange = isMobile() ? 35 : 97;
-            const size = baseSize + Math.random() * sizeRange;
-            const duration = 12000 + Math.random() * 14000;
-            const wobbleAmp = 18 + Math.random() * 28;
-            const wobbleSpeed = 0.6 + Math.random() * 1.2;
-            const tiltAmp = 6 + Math.random() * 10;
-            const rollSpeed = 0.3 + Math.random() * 0.5;
-            const rollAmp = 4 + Math.random() * 8;
-            const edge = Math.floor(Math.random() * 2);
-            let startX, startY, endX, endY;
-            let facingLeft = false;
+    fish._raf = requestAnimationFrame(frame);
+    return fish;
+}
 
-            if (edge === 0) {
-                startX = -120; endX = W + 120;
-                startY = 60 + Math.random() * (H - 160); endY = startY + (Math.random() - 0.5) * 120;
-                facingLeft = false;
-            } else {
-                startX = W + 120; endX = -120;
-                startY = 60 + Math.random() * (H - 160); endY = startY + (Math.random() - 0.5) * 120;
-                facingLeft = true;
-            }
+// ── SWIMMING state ──
+function beginSwim(fish, initial) {
+    fish.state = 'SWIMMING';
+    fish.targetFood = null;
 
-            img.style.width = size + 'px';
-            const dx = endX - startX;
-            const dy = endY - startY;
-            const travelAngleDeg = Math.atan2(dy, dx) * (180 / Math.PI);
-            const baseAngle = facingLeft ? travelAngleDeg + 180 : travelAngleDeg;
-            const scaleX = facingLeft ? -1 : 1;
-            const startTime = performance.now();
-            let raf;
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const edge = Math.floor(Math.random() * 2); // 0=left→right, 1=right→left
 
-            function tick(now) {
-                const elapsed = now - startTime;
-                const t = elapsed / duration;
-                if (t >= 1) {
-                    if (fishLayer.contains(wrapper)) fishLayer.removeChild(wrapper);
-                    const idx = activeFish.indexOf(entry);
-                    if (idx > -1) activeFish.splice(idx, 1);
-                    setTimeout(() => spawnFish(filename), 1000 + Math.random() * 4000);
-                    return;
-                }
-                const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-                const x = startX + (endX - startX) * ease;
-                const y = startY + (endY - startY) * ease;
-                const wobble = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * wobbleAmp;
-                const tilt = Math.sin(elapsed / 1000 * wobbleSpeed * Math.PI * 2) * tiltAmp;
-                const roll = Math.sin(elapsed / 1000 * rollSpeed * Math.PI * 2) * rollAmp;
-                const perpAngle = Math.atan2(dy, dx) - Math.PI / 2;
-                const wx = Math.cos(perpAngle) * wobble;
-                const wy = Math.sin(perpAngle) * wobble;
-                wrapper.style.left = (x + wx) + 'px';
-                wrapper.style.top = (y + wy) + 'px';
-                const finalAngle = baseAngle + tilt + roll;
-                img.style.transform = `rotate(${finalAngle}deg) scaleX(${scaleX})`;
-                raf = requestAnimationFrame(tick);
-            }
-            raf = requestAnimationFrame(tick);
-            const entry = { wrapper, raf, filename };
-            activeFish.push(entry);
-        }
+    let sx, sy, ex, ey;
+    if (edge === 0) {
+        sx = -120; ex = W + 120;
+        sy = 60 + Math.random() * (H - 160);
+        ey = sy + (Math.random() - 0.5) * 120;
+        fish.swimFacingLeft = false;
+    } else {
+        sx = W + 120; ex = -120;
+        sy = 60 + Math.random() * (H - 160);
+        ey = sy + (Math.random() - 0.5) * 120;
+        fish.swimFacingLeft = true;
+    }
 
-        const shuffledFish = shuffle(FISH_FILES);
-        shuffledFish.forEach((file, i) => {
-            setTimeout(() => spawnFish(file), i * 100 + Math.random() * 100);
-        });
+    if (initial) {
+        // start somewhere mid-screen so fish don't all enter at once
+        const t0 = Math.random();
+        fish.x = sx + (ex - sx) * t0;
+        fish.y = sy + (ey - sy) * t0;
+        fish.swimT = t0;
+    } else {
+        fish.x = sx;
+        fish.y = sy;
+        fish.swimT = 0;
+    }
 
-        // ══════════════════════════════════════════════
-        // AUDIO SETUP
-        // ══════════════════════════════════════════════
-        const audio = document.getElementById('bg-audio');
-        const overlay = document.getElementById('start-overlay');
-        const muteBtn = document.getElementById('mute-btn');
-        audio.volume = 0.5;
+    fish.swimSX  = sx; fish.swimSY = sy;
+    fish.swimEX  = ex; fish.swimEY = ey;
+    fish.swimDur = 12000 + Math.random() * 14000; // ms
+    fish.swimStart = null; // will be set on first tick
 
-        function startAudio() {
-            overlay.classList.add('hidden');
-            muteBtn.style.display = 'block';
-            audio.play().catch(err => console.warn('Audio play failed:', err));
-        }
+    const dx = ex - sx, dy = ey - sy;
+    const travelAngle = Math.atan2(dy, dx);
+    fish.swimBaseAngle = fish.swimFacingLeft ? travelAngle + Math.PI : travelAngle;
+    fish.facingAngle   = fish.swimBaseAngle;
+}
 
-        overlay.addEventListener('click', startAudio, { once: true });
-        overlay.addEventListener('touchend', startAudio, { once: true, passive: true });
+function tickSwim(fish, dt, now) {
+    if (!fish.swimStart) fish.swimStart = now - fish.swimT * fish.swimDur;
 
-        muteBtn.addEventListener('click', () => {
-            audio.muted = !audio.muted;
-            muteBtn.textContent = audio.muted ? '[ UNMUTE ]' : '[ MUTE ]';
-        });
+    const elapsed = now - fish.swimStart;
+    fish.swimT    = elapsed / fish.swimDur;
 
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden && audio.paused && !audio.muted) {
-                audio.play().catch(() => {});
-            }
-        });
+    if (fish.swimT >= 1) {
+        // reached destination — start a new swim
+        setTimeout(() => beginSwim(fish, false), 200 + Math.random() * 800);
+        fish.state = 'IDLE'; // prevents re-entry while waiting
+        return;
+    }
 
-        // ══════════════════════════════════════════════
-        // WINAMP UI LOGIC
-        // ══════════════════════════════════════════════
-        let seconds = 0;
-        let progress = 0;
-        let isPlaying = true;
-        let timeInterval, progressInterval, eqInterval;
-        const timeDisplay = document.getElementById('time-display');
-        const progressBar = document.getElementById('progress-bar');
-        const statusEl = document.getElementById('status');
-        const bars = document.querySelectorAll('.bar');
-        const closeBtn = document.getElementById('close-btn');
+    const t    = fish.swimT;
+    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
-        function animateEqualizer() {
-            bars.forEach(bar => {
-                const height = 20 + Math.random() * 78;
-                bar.style.height = `${height}%`;
-            });
-        }
+    fish.x = fish.swimSX + (fish.swimEX - fish.swimSX) * ease;
+    fish.y = fish.swimSY + (fish.swimEY - fish.swimSY) * ease;
 
-        function updateTime() {
-            if (!isPlaying) return;
-            seconds++;
-            const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
-            const ss = String(seconds % 60).padStart(2, '0');
-            timeDisplay.textContent = `${mm}:${ss}`;
-        }
+    // wobble perpendicular to direction
+    const dx  = fish.swimEX - fish.swimSX;
+    const dy  = fish.swimEY - fish.swimSY;
+    const perpAngle = Math.atan2(dy, dx) - Math.PI / 2;
+    const wobbleAmt = isMobile() ? 14 : 20;
+    const ws        = 0.6 + 0.8; // a rough speed constant
+    const wobble    = Math.sin(elapsed / 1000 * ws * Math.PI * 2) * wobbleAmt;
+    fish.x += Math.cos(perpAngle) * wobble;
+    fish.y += Math.sin(perpAngle) * wobble;
 
-        function updateProgress() {
-            if (!isPlaying) return;
-            progress = (progress + 3.5) % 101;
-            progressBar.style.width = `${progress}%`;
-        }
+    // facing angle: base + gentle tilt from wobble derivative
+    const tiltAmt = 5;
+    const tilt    = Math.sin(elapsed / 1000 * ws * Math.PI * 2 + 0.3) * tiltAmt;
+    const targetAngle = fish.swimBaseAngle + tilt * (Math.PI / 180);
+    fish.facingAngle  = lerpAngle(fish.facingAngle, targetAngle, 0.15);
+}
 
-        function startAnimations() {
-            if (timeInterval) clearInterval(timeInterval);
-            if (progressInterval) clearInterval(progressInterval);
-            if (eqInterval) clearInterval(eqInterval);
-            timeInterval = setInterval(updateTime, 1000);
-            progressInterval = setInterval(updateProgress, 90);
-            eqInterval = setInterval(animateEqualizer, 38);
-        }
+// ── HOMING state ──
+function tickHoming(fish, dt, now) {
+    const food = fish.targetFood;
 
-        closeBtn.addEventListener('click', () => {
-            setTimeout(() => { alert("loser :P"); }, 100);
-        });
+    // food was eaten by someone else
+    if (!food || !food.alive) {
+        beginResume(fish);
+        return;
+    }
 
-        document.getElementById('play-btn').addEventListener('click', () => {
-            isPlaying = true;
-            statusEl.textContent = 'PLAYING';
-        });
+    const dx   = food.x - fish.x;
+    const dy   = food.y - fish.y;
+    const d    = Math.hypot(dx, dy);
+    const spd  = fish.homingSpeed * (isMobile() ? 90 : 130); // px/s
 
-        document.getElementById('pause-btn').addEventListener('click', () => {
-            isPlaying = false;
-            statusEl.textContent = 'PAUSED';
-        });
+    if (d < 18) {
+        // arrived — eat it
+        fish.state   = 'EATING';
+        fish.eatTimer = 0;
+        if (food.alive) removeFoodEaten(food);
+        fish.targetFood = null;
+        return;
+    }
 
-        document.getElementById('stop-btn').addEventListener('click', () => {
-            isPlaying = false;
-            seconds = 0;
-            progress = 0;
-            timeDisplay.textContent = '00:00';
-            progressBar.style.width = '0%';
-            statusEl.textContent = 'STOPPED';
-        });
+    // move toward food
+    const step = Math.min(spd * dt, d);
+    fish.x += (dx / d) * step;
+    fish.y += (dy / d) * step;
 
-        document.querySelectorAll('.playlist-row').forEach(row => {
-            row.addEventListener('click', () => {
-                const link = row.querySelector('a');
-                if (link) window.open(link.href, '_blank');
-            });
-        });
+    // face food — smooth turn
+    const desiredAngle = Math.atan2(dy, dx);
+    fish.facingAngle   = lerpAngle(fish.facingAngle, desiredAngle, 0.12);
+}
 
-        document.addEventListener('keydown', e => {
-            if (e.key === ' ') {
-                e.preventDefault();
-                isPlaying = !isPlaying;
-                statusEl.textContent = isPlaying ? 'PLAYING' : 'PAUSED';
-            }
-        });
+// ── EATING state ──
+function tickEating(fish, dt, now) {
+    fish.eatTimer += dt;
+    // little happy wiggle
+    const wiggle = Math.sin(fish.eatTimer * 20) * 4 * (1 - fish.eatTimer / 0.7);
+    fish.facingAngle += wiggle * (Math.PI / 180);
+    if (fish.eatTimer >= 0.6) {
+        beginResume(fish);
+    }
+}
 
-        window.onload = () => { startAnimations(); };
-    </script>
+// ── RESUMING state — smoothly blend back into a swim path ──
+function beginResume(fish) {
+    fish.state    = 'RESUMING';
+    fish.resumeT  = 0;
+    fish.targetFood = null;
+
+    // build a new swim destination from current position
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const goRight = fish.x < W / 2;
+
+    fish.swimSX = fish.x;
+    fish.swimSY = fish.y;
+    fish.swimEX = goRight ? W + 140 : -140;
+    fish.swimEY = fish.y + (Math.random() - 0.5) * 100;
+    fish.swimFacingLeft = !goRight;
+
+    const dx = fish.swimEX - fish.swimSX;
+    const dy = fish.swimEY - fish.swimSY;
+    fish.swimBaseAngle = Math.atan2(dy, dx) + (fish.swimFacingLeft ? Math.PI : 0);
+    fish.swimDur   = 9000 + Math.random() * 8000;
+    fish.swimStart = null;
+    fish.swimT     = 0;
+}
+
+function tickResume(fish, dt, now) {
+    fish.resumeT += dt;
+    const blend = Math.min(fish.resumeT / 0.8, 1); // 0.8s blend
+
+    if (blend >= 1) {
+        // fully blended — hand off to normal swim
+        fish.state = 'SWIMMING';
+        fish.swimStart = null; // recalculate from current swimT
+        return;
+    }
+
+    // during blend: run swim logic but apply partial wobble
+    if (!fish.swimStart) fish.swimStart = now - fish.swimT * fish.swimDur;
+    const elapsed = now - fish.swimStart;
+    fish.swimT    = elapsed / fish.swimDur;
+
+    if (fish.swimT >= 1) { beginSwim(fish, false); return; }
+
+    const t    = fish.swimT;
+    const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+    fish.x = fish.swimSX + (fish.swimEX - fish.swimSX) * ease;
+    fish.y = fish.swimSY + (fish.swimEY - fish.swimSY) * ease;
+
+    // face destination gradually
+    const targetAngle = fish.swimBaseAngle;
+    fish.facingAngle  = lerpAngle(fish.facingAngle, targetAngle, 0.08 + blend * 0.1);
+}
+
+// ── initial spawn ──
+const shuffledFish = shuffle(FISH_FILES);
+shuffledFish.forEach((file, i) => {
+    setTimeout(() => spawnFish(file), i * 100 + Math.random() * 100);
+});
+
+// ══════════════════════════════════════════════════════════════════
+// FOOD SPAWNING — click / tap (not on UI elements)
+// ══════════════════════════════════════════════════════════════════
+const feedHint = document.getElementById('feed-hint');
+let feedHintHidden = false;
+let lastFoodTime   = 0;
+const FOOD_COOLDOWN = 120; // ms — prevents double-fire on touch+click
+
+function trySpawnFood(clientX, clientY, sourceEl) {
+    // ignore clicks on the winamp or overlay
+    if (sourceEl.closest('#winamp, #start-overlay, #mute-btn')) return;
+    const now = Date.now();
+    if (now - lastFoodTime < FOOD_COOLDOWN) return;
+    lastFoodTime = now;
+
+    spawnFood(clientX, clientY);
+
+    if (!feedHintHidden) {
+        feedHintHidden = true;
+        feedHint.classList.add('hidden');
+    }
+}
+
+document.addEventListener('click', e => {
+    trySpawnFood(e.clientX, e.clientY, e.target);
+});
+
+document.addEventListener('touchend', e => {
+    const t = e.changedTouches[0];
+    trySpawnFood(t.clientX, t.clientY, e.target);
+}, { passive: true });
+
+// ══════════════════════════════════════════════════════════════════
+// AUDIO
+// ══════════════════════════════════════════════════════════════════
+const audio   = document.getElementById('bg-audio');
+const overlay = document.getElementById('start-overlay');
+const muteBtn = document.getElementById('mute-btn');
+audio.volume  = 0.5;
+
+function startAudio() {
+    overlay.classList.add('hidden');
+    muteBtn.style.display = 'block';
+    audio.play().catch(err => console.warn('Audio play failed:', err));
+}
+
+overlay.addEventListener('click',    startAudio, { once: true });
+overlay.addEventListener('touchend', startAudio, { once: true, passive: true });
+
+muteBtn.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    muteBtn.textContent = audio.muted ? '[ UNMUTE ]' : '[ MUTE ]';
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && audio.paused && !audio.muted) {
+        audio.play().catch(() => {});
+    }
+});
+
+// ══════════════════════════════════════════════════════════════════
+// WINAMP UI
+// ══════════════════════════════════════════════════════════════════
+let seconds = 0, progress = 0, isPlaying = true;
+let timeInterval, progressInterval, eqInterval;
+const timeDisplay = document.getElementById('time-display');
+const progressBar = document.getElementById('progress-bar');
+const statusEl    = document.getElementById('status');
+const bars        = document.querySelectorAll('.bar');
+const closeBtn    = document.getElementById('close-btn');
+
+function animateEqualizer() {
+    bars.forEach(bar => {
+        bar.style.height = (20 + Math.random() * 78) + '%';
+    });
+}
+
+function updateTime() {
+    if (!isPlaying) return;
+    seconds++;
+    const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const ss = String(seconds % 60).padStart(2, '0');
+    timeDisplay.textContent = `${mm}:${ss}`;
+}
+
+function updateProgress() {
+    if (!isPlaying) return;
+    progress = (progress + 3.5) % 101;
+    progressBar.style.width = `${progress}%`;
+}
+
+function startAnimations() {
+    clearInterval(timeInterval);
+    clearInterval(progressInterval);
+    clearInterval(eqInterval);
+    timeInterval     = setInterval(updateTime,        1000);
+    progressInterval = setInterval(updateProgress,    90);
+    eqInterval       = setInterval(animateEqualizer,  38);
+}
+
+closeBtn.addEventListener('click', () => {
+    setTimeout(() => { alert("loser :P"); }, 100);
+});
+
+document.getElementById('play-btn').addEventListener('click',  () => { isPlaying = true;  statusEl.textContent = 'PLAYING'; });
+document.getElementById('pause-btn').addEventListener('click', () => { isPlaying = false; statusEl.textContent = 'PAUSED'; });
+document.getElementById('stop-btn').addEventListener('click',  () => {
+    isPlaying = false; seconds = 0; progress = 0;
+    timeDisplay.textContent = '00:00';
+    progressBar.style.width = '0%';
+    statusEl.textContent = 'STOPPED';
+});
+
+document.querySelectorAll('.playlist-row').forEach(row => {
+    row.addEventListener('click', () => {
+        const link = row.querySelector('a');
+        if (link) window.open(link.href, '_blank');
+    });
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === ' ') {
+        e.preventDefault();
+        isPlaying = !isPlaying;
+        statusEl.textContent = isPlaying ? 'PLAYING' : 'PAUSED';
+    }
+});
+
+window.onload = () => { startAnimations(); };
+</script>
 </body>
 </html>
